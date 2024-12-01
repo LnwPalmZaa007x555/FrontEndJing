@@ -1,0 +1,94 @@
+.container {
+    text-align: center;
+    padding: 20px;
+    padding-top: 80px;
+    padding-bottom: 50px;
+    background-color: #f9f9f9; /* สีพื้นหลังที่สะอาด */
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff; /* พื้นหลังสีขาว */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #005bb5; /* ใช้สีฟ้าเข้มที่สอดคล้องกับหน้าหลัก */
+}
+
+.roomList {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* เพิ่มช่องว่างระหว่างการ์ด */
+    align-items: center;
+}
+
+.roomCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* ขอบโค้งมนเล็กน้อย */
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* สีขาว */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.roomCard:hover {
+    transform: translateY(-5px); /* ยกการ์ดขึ้นเล็กน้อย */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.roomImage {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.roomDetails {
+    flex: 1;
+    margin-left: 20px;
+    text-align: left;
+}
+
+.roomTitle {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #005bb5; /* ใช้สีฟ้าเข้มให้กลมกลืน */
+}
+
+.roomDescription {
+    font-size: 1rem;
+    color: #666; /* สีเทาเข้มสำหรับข้อความ */
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.roomButton {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    background-color: #005bb5; /* สีฟ้าเข้ม */
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.roomButton:hover {
+    background-color: #0073e6; /* สีฟ้าอ่อนเมื่อ Hover */
+    transform: scale(1.05); /* ขยายปุ่มเล็กน้อยเมื่อ Hover */
+}

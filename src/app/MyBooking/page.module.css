@@ -1,0 +1,95 @@
+/* General Container */
+.container {
+    padding: 20px;
+    padding-top: 100px; /* Adjust for Navbar */
+    background-color: #f9f9f9;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Header */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title */
+  .title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #032f30;
+    margin-bottom: 40px;
+  }
+  
+  /* Bookings List */
+  .bookingsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  /* Booking Card */
+  .bookingCard {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .bookingCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Booking Details */
+  .bookingDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .bookingTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #032f30;
+  }
+  
+  .bookingStatus {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  .booked {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .canceled {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .bookingPrice {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .bookingDetails p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+  }
+  

@@ -1,0 +1,79 @@
+.container {
+    text-align: center;
+    padding: 20px;
+    padding-top: 80px;
+    background-color: #f9f9f9; /* สีพื้นหลัง */
+  }
+  
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff; /* พื้นหลัง navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงาของ navbar */
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333; /* สีหัวข้อ */
+  }
+  
+  .roomContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .roomImage {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* เงาของรูปภาพ */
+  }
+  
+  .roomDetails {
+    text-align: center;
+  }
+  
+  .roomTitle {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #222;
+  }
+  
+  .roomDescription {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .bookButton {
+    padding: 12px 25px;
+    background-color: #032F30; /* สีเขียวเข้ม */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .bookButton:hover {
+    background-color: #6BA3BE; /* สีฟ้าอ่อน */
+    transform: scale(1.05); /* ขยายปุ่มเล็กน้อยเมื่อ hover */
+  }
+  

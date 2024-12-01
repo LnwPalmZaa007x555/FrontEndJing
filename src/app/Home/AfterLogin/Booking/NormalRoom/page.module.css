@@ -1,0 +1,85 @@
+.container {
+    text-align: center;
+    padding: 20px;
+    padding-top: 80px;
+    background-color: #f9f9f9; /* สีพื้นหลังที่เข้ากับหน้าหลัก */
+  }
+  
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff; /* พื้นหลัง navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #005bb5; /* สีฟ้าเข้มที่สอดคล้องกับธีม */
+  }
+  
+  .roomContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: #ffffff; /* พื้นหลังการ์ด */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* เงาของการ์ด */
+    max-width: 600px;
+    margin: 20px auto; /* เพิ่มระยะห่างด้านบน */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .roomContainer:hover {
+    transform: translateY(-5px); /* เพิ่มเอฟเฟกต์ยกการ์ดขึ้น */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* เพิ่มเงาเมื่อ hover */
+  }
+  
+  .roomImage {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* เงาของรูปภาพ */
+  }
+  
+  .roomDetails {
+    text-align: center;
+  }
+  
+  .roomTitle {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #032F30; /* สีเขียวเข้ม */
+  }
+  
+  .roomDescription {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555; /* สีเทา */
+    margin-bottom: 20px;
+  }
+  
+  .bookButton {
+    padding: 12px 25px;
+    background-color: #032F30; /* สีเขียวเข้ม */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .bookButton:hover {
+    background-color: #6BA3BE; /* สีฟ้าอ่อนเมื่อ hover */
+    transform: scale(1.05);
+  }
+  

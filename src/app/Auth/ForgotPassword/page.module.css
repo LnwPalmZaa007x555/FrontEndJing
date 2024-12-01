@@ -1,0 +1,91 @@
+/* General Styles */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9; /* สีพื้นหลัง */
+    color: #333333; /* สีข้อความหลัก */
+  }
+
+  .container {
+    text-align: center;
+    padding: 20px;
+    padding-top: 100px;
+    background-color: #f9f9f9;
+  }
+  
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #032F30;
+    margin-bottom: 30px;
+  }
+  
+  .formContainer {
+    background-color: #fff;
+    padding: 25px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .label {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .input:focus {
+    border-color: #6BA3BE;
+    outline: none;
+  }
+  
+  .resetButton {
+    background-color: #032F30;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .resetButton:hover {
+    background-color: #6BA3BE;
+  }
+  
+  .errorText {
+    color: #ff4d4f;
+    font-size: 0.9rem;
+  }
+  
+  .successMessage {
+    margin-top: 15px;
+    color: #4caf50;
+    font-size: 1rem;
+  }
+  
