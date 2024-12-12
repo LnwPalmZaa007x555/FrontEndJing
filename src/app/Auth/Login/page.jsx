@@ -5,44 +5,60 @@ import styles from './page.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import {  } from '../../../lib/api'
+import { signIn } from 'next-auth/react';
+
 export default function Signin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const router = useRouter();
 
-  const handleEmailChange = (e) => {
-    const input = e.target.value;
-    // กรองเฉพาะอักษรภาษาอังกฤษ ตัวเลข และอักขระพิเศษที่ใช้ในอีเมลเท่านั้น
-    const filteredInput = input.replace(/[^a-zA-Z0-9@._-]/g, '');
-    setEmail(filteredInput);
-    setEmailError(''); // ล้างข้อความเตือนเมื่อกรอกถูกต้อง
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    // Validate input immediately
+    if (name === 'email') {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(value)) {
+        setEmailError('Invalid email format');
+      } else {
+        setEmailError('');
+      }
+    }
+
+    if (name === 'password') {
+      if (value.length < 8) {
+        setPasswordError('Password must be at least 8 characters');
+      } else {
+        setPasswordError('');
+      }
+    }
   };
 
-  const handlePasswordChange = (e) => {
-    const input = e.target.value;
-    // กรองให้สามารถกรอกอักษรภาษาอังกฤษ ตัวเลข และอักขระพิเศษในรหัสผ่านได้
-    const filteredInput = input.replace(/[^a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|`~\-]/g, '');
-    setPassword(filteredInput);
-    setPasswordError(''); // ล้างข้อความเตือนเมื่อกรอกถูกต้อง
-  };
-
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     let isValid = true;
 
     // ตรวจสอบว่ากรอก email หรือ password ครบถ้วนหรือไม่
-    if (email.trim() === '') {
+    if (formData.email.trim() === '') {
       setEmailError('Please enter your email');
       isValid = false;
     } else {
       setEmailError('');
     }
 
-    if (password.trim() === '') {
+    if (formData.password.trim() === '') {
       setPasswordError('Please enter your password');
       isValid = false;
     } else {
@@ -51,10 +67,29 @@ export default function Signin() {
 
     // หากข้อมูลครบถ้วนให้ทำการ sign in และนำทางไปหน้าแรก
     if (isValid) {
+      try {
+        const email = formData.email
+        const password = formData.password
+        const result = await signIn('credentials',{
+          redirect: false,
+          email,
+          password
+        })
+  
+        if (result.error) {
+          console.error(result.error);
+          alert('Login failed: ' + result.error);
+        } else {
+          router.push('/');
+        }        
+      } catch (error) {
+        console.log('error', error)
+      }
       alert('Sign in successful');
-      router.push('/Home/AfterLogin'); // นำทางไปที่หน้าแรก
+      console.log('Form data submitted:', formData);
     }
   };
+
 
   return (
     <div className={styles.container}>
@@ -67,20 +102,22 @@ export default function Signin() {
           <label className={styles.label}>Email</label>
           <input
             type="text"
+            name="email"
             className={styles.input}
             placeholder="Enter Here"
-            value={email}
-            onChange={handleEmailChange}
+            value={formData.email}
+            onChange={handleInputChange}
           />
           {emailError && <p className={styles.errorText}>{emailError}</p>}
           
           <label className={styles.label}>Password</label>
           <input
             type="password"
+            name="password"
             className={styles.input}
             placeholder="Enter Here"
-            value={password}
-            onChange={handlePasswordChange}
+            value={formData.password}
+            onChange={handleInputChange}
           />
           {passwordError && <p className={styles.errorText}>{passwordError}</p>}
 

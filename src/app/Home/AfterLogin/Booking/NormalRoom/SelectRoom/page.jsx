@@ -1,80 +1,66 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react"
 import Navbar from "../../../../../Navbar/After/page";
 import styles from "./page.module.css";
+import { listRooms } from "../../../../../../lib/api";
 
 export default function FloorPlan() {
   const router = useRouter();
 
-  const floors = [
-    {
-      name: "2nd Floor",
-      floorNumber: "2nd",
-      rooms: [
-        { id: 201, status: "available" },
-        { id: 202, status: "available" },
-        { id: 203, status: "available" },
-        { id: 204, status: "available" },
-        { id: 205, status: "booked" },
-        { id: 206, status: "available" },
-        { id: 207, status: "available" },
-        { id: 208, status: "available" },
-        { id: 209, status: "available" },
-        { id: 210, status: "available" },
-        { id: 211, status: "available" },
-        { id: 212, status: "available" },
-        { id: 213, status: "available" },
-        { id: 214, status: "available" },
-        { id: 215, status: "available" },
-        { id: "Staff", status: "staff" },
-      ],
-    },
-    {
-      name: "3rd Floor",
-      floorNumber: "3rd",
-      rooms: [
-        { id: 301, status: "available" },
-        { id: 302, status: "available" },
-        { id: 303, status: "available" },
-        { id: 304, status: "available" },
-        { id: 305, status: "booked" },
-        { id: 306, status: "available" },
-        { id: 307, status: "available" },
-        { id: 308, status: "available" },
-        { id: 309, status: "available" },
-        { id: 310, status: "available" },
-        { id: 311, status: "available" },
-        { id: 312, status: "available" },
-        { id: 313, status: "available" },
-        { id: 314, status: "available" },
-        { id: 315, status: "available" },
-        { id: "Staff", status: "staff" },
-      ],
-    },
-    {
-      name: "4th Floor",
-      floorNumber: "4th",
-      rooms: [
-        { id: 401, status: "booked" },
-        { id: 402, status: "available" },
-        { id: 403, status: "available" },
-        { id: 404, status: "available" },
-        { id: 405, status: "booked" },
-        { id: 406, status: "available" },
-        { id: 407, status: "available" },
-        { id: 408, status: "available" },
-        { id: 409, status: "available" },
-        { id: 410, status: "available" },
-        { id: 411, status: "available" },
-        { id: 412, status: "available" },
-        { id: 413, status: "available" },
-        { id: 414, status: "available" },
-        { id: 415, status: "available" },
-        { id: "Staff", status: "staff" },
-      ],
-    },
-  ];
+  const [floors, setFloors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await listRooms()
+        if (response.data.success) {
+          const roomsData = response.data.data;
+          console.log(response.data)
+          // การจัดกลุ่มห้องในแต่ละชั้น
+          const reRoom = []
+          roomsData.forEach((room) =>{
+           const data = {
+              id:Number(room.roomName),
+              status:room.roomStatus == 1?'booked' : 'available'
+            }
+            reRoom.push(data)
+          })
+          console.log('ควย'+reRoom)
+          const groupedRooms = groupRoomsByFloor(reRoom);
+          setFloors(groupedRooms);
+          console.log(groupedRooms)
+        }
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, []);
+
+  const groupRoomsByFloor = (rooms) => {
+    const floors = [];
+    rooms.forEach((room) => {
+      const floorNumber = Math.floor(Number(room.id) / 100); // การคำนวณชั้นจาก roomId (เช่น 201 -> 2nd floor)
+      console.log(floorNumber)
+      let floor = floors.find((f) => f.floorNumber === floorNumber);
+      if (!floor) {
+        floor = {
+          floorNumber,
+          name: `${floorNumber}th Floor`,
+          rooms: [],
+        };
+        floors.push(floor);
+      }
+      floor.rooms.push(room);
+    });
+    return floors;
+  };
+
 
   const handleRoomClick = (roomId, roomStatus, floorNumber) => {
     if (roomStatus === "available") {

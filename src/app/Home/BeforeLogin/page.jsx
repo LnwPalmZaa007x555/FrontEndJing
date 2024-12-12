@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 
 import Navbar from "../../Navbar/Before/page";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import styles from "./page.module.css";
 
 export default function HomePage() {
+  const { session } = useSession();
   return (
     <div className={styles.container}>
       <header className={styles.header}>

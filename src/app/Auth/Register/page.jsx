@@ -5,12 +5,16 @@ import styles from './page.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { register } from '../../../lib/api'
+
 export default function Register() {
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
 
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
@@ -20,101 +24,133 @@ export default function Register() {
 
   const router = useRouter();
 
-  const capitalizeFirstLetter = (text) => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const handleFirstNameChange = (e) => {
-    const input = e.target.value;
-    if (/^[a-zA-Z]*$/.test(input)) {
-      setFirstName(capitalizeFirstLetter(input));
-      setFirstNameError('');
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    let formattedValue = value; // กำหนดค่าเริ่มต้นให้เป็นค่าจาก input
+
+    switch (name) {
+      case 'fname':
+        if (/^[a-zA-Z]*$/.test(value)) {
+          formattedValue = capitalizeFirstLetter(value); // ทำตัวอักษรแรกเป็นพิมพ์ใหญ่
+          setFormData((prevData) => ({
+            ...prevData,
+            fname: formattedValue,
+          }));
+          setFirstNameError('');
+        } else {
+          setFirstNameError('First name must only contain letters.');
+        }
+        break;
+
+      case 'lname': 
+        if (/^[a-zA-Z]*$/.test(value)) {
+          formattedValue = capitalizeFirstLetter(value); // ทำตัวอักษรแรกเป็นพิมพ์ใหญ่
+          setFormData((prevData) => ({
+            ...prevData,
+            lname: formattedValue,
+          }));
+          setLastNameError('');
+        } else {
+          setLastNameError('Last name must only contain letters.');
+        }
+        break;
+
+      case 'phone':
+        if (/^\d{0,10}$/.test(value)) {
+          setFormData((prevData) => ({
+            ...prevData,
+            phone: value,
+          }));
+          setPhoneError('');
+        } else {
+          setPhoneError('Phone number must contain only digits and up to 10 characters.');
+        }
+        break;
+
+      case 'email':
+        const filteredEmail = value.replace(/[^a-zA-Z0-9@._-]/g, '');
+        setFormData((prevData) => ({
+          ...prevData,
+          email: filteredEmail,
+        }));
+        setEmailError('');
+        break;
+
+      case 'password':
+        if (/^[a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|`~\-]*$/.test(value)) {
+          setFormData((prevData) => ({
+            ...prevData,
+            password: value,
+          }));
+          setPasswordError('');
+        } else {
+          setPasswordError('Password contains invalid characters.');
+        }
+        break;
+
+      default:
+        break;
     }
-  };
-
-  const handleLastNameChange = (e) => {
-    const input = e.target.value;
-    if (/^[a-zA-Z]*$/.test(input)) {
-      setLastName(capitalizeFirstLetter(input));
-      setLastNameError('');
-    }
-  };
-
-  const handlePhoneChange = (e) => {
-    const input = e.target.value;
-    if (/^\d{0,10}$/.test(input)) {
-      setPhone(input);
-      setPhoneError('');
-    }
-  };
-
-  const handleEmailChange = (e) => {
-    const input = e.target.value;
-    // กรองเฉพาะภาษาอังกฤษ ตัวเลข และอักขระที่อนุญาตในอีเมล
-    const filteredInput = input.replace(/[^a-zA-Z0-9@._-]/g, '');
-    setEmail(filteredInput);
-    setEmailError('');
   };
 
   const validateEmail = () => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailPattern.test(email)) {
-      setEmailError('Please enter a valid email address');
+    if (!emailPattern.test(formData.email)) {
+      setEmailError('Please enter a valid email address.');
     } else {
       setEmailError('');
     }
   };
 
-  const handlePasswordChange = (e) => {
-    const input = e.target.value;
-    if (/^[a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|`~\-]*$/.test(input)) {
-      setPassword(input);
-      setPasswordError('');
-    }
-  };
-
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     let isValid = true;
 
-    if (firstName.trim() === '') {
+    // การตรวจสอบข้อมูลเบื้องต้น
+    if (formData.fname.trim() === '') {
       setFirstNameError('Please enter your first name');
       isValid = false;
-    } else {
-      setFirstNameError('');
     }
 
-    if (lastName.trim() === '') {
+    if (formData.lname.trim() === '') {
       setLastNameError('Please enter your last name');
       isValid = false;
-    } else {
-      setLastNameError('');
     }
 
-    if (phone.length !== 10) {
+    if (formData.phone.length !== 10) {
       setPhoneError('Please enter a 10-digit phone number');
       isValid = false;
-    } else {
-      setPhoneError('');
     }
 
-    if (email.trim() === '') {
+    if (formData.email.trim() === '') {
       setEmailError('Please enter your email');
       isValid = false;
     } else {
       validateEmail();
     }
 
-    if (password.length < 8) {
+    if (formData.password.length < 8) {
       setPasswordError('Please enter a password with at least 8 characters');
       isValid = false;
-    } else {
-      setPasswordError('');
     }
 
     if (isValid) {
       alert('Registration successful');
       router.push('/Home/AfterLogin');
+    }
+
+    const { fname, lname, email, password, phone } = formData;
+    try {
+      const resp = await register({ fname, lname, email, password, phone });
+      console.log(resp);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -129,41 +165,45 @@ export default function Register() {
           <label className={styles.label}>First Name</label>
           <input
             type="text"
+            name="fname"
+            value={formData.fname}
             className={styles.input}
             placeholder="Enter here"
-            value={firstName}
-            onChange={handleFirstNameChange}
+            onChange={handleInputChange}
           />
           {firstNameError && <p className={styles.errorText}>{firstNameError}</p>}
 
           <label className={styles.label}>Last Name</label>
           <input
             type="text"
+            name="lname"
+            value={formData.lname}
             className={styles.input}
             placeholder="Enter here"
-            value={lastName}
-            onChange={handleLastNameChange}
+            onChange={handleInputChange}
           />
           {lastNameError && <p className={styles.errorText}>{lastNameError}</p>}
 
           <label className={styles.label}>Phone</label>
           <input
             type="text"
+            name="phone"
+            value={formData.phone}
             className={styles.input}
             placeholder="Enter here"
-            value={phone}
-            onChange={handlePhoneChange}
+            onChange={handleInputChange}
             maxLength={10}
           />
           {phoneError && <p className={styles.errorText}>{phoneError}</p>}
 
           <label className={styles.label}>Email</label>
           <input
-            type="email"
+            type="text"
+            name="email"
+            value={formData.email}
             className={styles.input}
             placeholder="Enter here"
-            value={email}
-            onChange={handleEmailChange}
+            onChange={handleInputChange}
             onBlur={validateEmail}
           />
           {emailError && <p className={styles.errorText}>{emailError}</p>}
@@ -171,10 +211,11 @@ export default function Register() {
           <label className={styles.label}>Password</label>
           <input
             type="password"
+            name="password"
+            value={formData.password}
             className={styles.input}
             placeholder="Enter here"
-            value={password}
-            onChange={handlePasswordChange}
+            onChange={handleInputChange}
           />
           {passwordError && <p className={styles.errorText}>{passwordError}</p>}
 
