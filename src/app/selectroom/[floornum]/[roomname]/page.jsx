@@ -3,8 +3,10 @@
 //http://localhost:3000/selectroom/2/202
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
+import creatBooking from "@/lib/creatbooking";
+import { useSession } from "next-auth/react";
 
 export default function PaymentPage({ params }) {
   const [floorNumber, setFloorNumber] = useState(null);
@@ -12,37 +14,79 @@ export default function PaymentPage({ params }) {
   const [checkInDate, setCheckInDate] = useState(""); // Check-in date state
   const [checkOutDate, setCheckOutDate] = useState(""); // Check-out date state
   const [guests, setGuests] = useState(""); // Guests state
+  const [maxGuests, setMaxGuests] = useState(2);
+  const { data: session, status } = useSession()
 
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
+
+  const searchParams = useSearchParams(); // ใช้ useSearchParams
+    const roomD = searchParams.get("roomId");
+
+  // คำนวณวันที่ปัจจุบันในรูปแบบ yyyy-MM-dd
+  const todayDate = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     async function fetchParams() {
       const resolvedParams = await params;
-      setFloorNumber(resolvedParams.floornum);
-      setRoomId(resolvedParams.roomname);
+      const resolvedRoomId = Number(resolvedParams.roomname);
+      const resolvedFloorNum = Number(resolvedParams.floornum);
+      setFloorNumber(resolvedFloorNum);
+      setRoomId(resolvedRoomId);
+
+      // Update maxGuests based on roomId
+      if (resolvedFloorNum > 4) {
+        setMaxGuests(3);
+      } else {
+        setMaxGuests(2);
+      }
     }
     fetchParams();
   }, [params]);
 
-  if (!floorNumber || !roomId) {
-    return <div>Loading...</div>;
-  }
-
-  const handleConfirm = () => {
-    if (!checkInDate || !checkOutDate || !guests) {
-      alert("Please fill in all fields before confirming.");
-      return;
+  useEffect(() => {
+    if (checkInDate) {
+      const checkInDateObj = new Date(checkInDate);
+      checkInDateObj.setFullYear(checkInDateObj.getFullYear() + 1);
+      const newCheckInDate = checkInDateObj.toISOString().split("T")[0];
+      setCheckOutDate(newCheckInDate);
     }
-    alert(`Booking confirmed for Room ${roomId} on Floor ${floorNumber} (Premium Room).
-Check-in: ${checkInDate}
-Check-out: ${checkOutDate}
-Guests: ${guests}`);
-    router.push("/"); // Navigate to the main page
+  }, [checkInDate]);
+
+  const handleConfirm = async () => {
+    try {
+      if (!checkInDate || !checkOutDate || !guests) {
+        alert("Please fill in all fields before confirming.");
+        return;
+      }
+  
+      const response = await creatBooking(
+        {
+          startDate: new Date(checkInDate),
+          endDate: new Date(checkOutDate),
+          numGuest: Number(guests),
+        },
+        roomD,
+        session?.user?.token
+      );
+  
+      alert(`Booking confirmed for Room ${roomId} on Floor ${floorNumber} (Premium Room).
+  Check-in: ${checkInDate}
+  Check-out: ${checkOutDate}
+  Guests: ${guests}`);
+      router.push("/");
+    } catch (err) {
+      console.log(err)
+    }
   };
 
   const handleCancel = () => {
-    router.back(); // Go back to the previous page
+    router.back();
   };
+
+  const guestOptions = Array.from(
+    { length: maxGuests },
+    (_, index) => index + 1
+  );
 
   return (
     <div className={styles.container}>
@@ -59,6 +103,7 @@ Guests: ${guests}`);
             className={styles.input}
             value={checkInDate}
             onChange={(e) => setCheckInDate(e.target.value)}
+            min={todayDate} // ป้องกันการเลือกวันที่ในอดีต
           />
 
           <label className={styles.label}>Date Check Out</label>
@@ -66,7 +111,7 @@ Guests: ${guests}`);
             type="date"
             className={styles.input}
             value={checkOutDate}
-            onChange={(e) => setCheckOutDate(e.target.value)}
+            readOnly // ทำให้ฟิลด์นี้ไม่สามารถแก้ไขได้
           />
 
           <label className={styles.label}>Number of guests</label>
@@ -75,10 +120,12 @@ Guests: ${guests}`);
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
           >
-            <option value="">Value</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
+            <option value="">Select</option>
+            {guestOptions.map((guest) => (
+              <option key={guest} value={guest}>
+                {guest}
+              </option>
+            ))}
           </select>
 
           <div className={styles.price}>4,500 BAHT</div>

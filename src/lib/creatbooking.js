@@ -1,12 +1,20 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const endpoint = "http://localhost:5000/api/";
 
-export default async function userResetPassword(data){
+export default async function creatBooking(data,roomId,token){
+    console.log(token)
+    console.log(roomId)
     try {
-        console.log('reset')
         console.log('test')
-        const response = await axios.post(endpoint + 'users/resetpassword', data);
+        // เก็บ token ลงใน Cookies (client-side)
+        Cookies.set('token', token, { expires: 1 });
+
+        const response = await axios.post(endpoint + 'bookings/'+roomId, data,{
+            withCredentials: true,
+        });
+        
         
         // ตรวจสอบว่า login สำเร็จหรือไม่
         if (!response.data.success) {

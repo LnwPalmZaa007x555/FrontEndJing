@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation";
 
 import styles from "./page.module.css";
 import { listRooms } from "@/lib/api";
@@ -9,12 +10,19 @@ import { listRooms } from "@/lib/api";
 
 export default function FloorPlan() {
   const router = useRouter();
+ 
+  const searchParams = useSearchParams(); // ใช้ useSearchParams
+  const type = searchParams.get("type"); // ดึงค่า type จาก query string
 
   const [floors, setFloors] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    console.log(type)
+
     const fetchRooms = async () => {
       try {
+        const roomlane = type == 0?[5,6]:[2,3,4]
         const response = await listRooms()
         if (response.data.success) {
           const roomsData = response.data.data;
@@ -22,10 +30,15 @@ export default function FloorPlan() {
           // การจัดกลุ่มห้องในแต่ละชั้น
           const reRoom = []
           roomsData.forEach((room) =>{
+            if(roomlane.includes(Number(room.roomName[0]))){
+              return 
+            }
            const data = {
+              roomId:Number(room.roomId),
               id:Number(room.roomName),
               status:room.roomStatus == 1?'booked' : 'available'
             }
+            console.log(data)
             reRoom.push(data)
           })
           console.log('test'+reRoom)
@@ -50,9 +63,15 @@ export default function FloorPlan() {
       console.log(floorNumber)
       let floor = floors.find((f) => f.floorNumber === floorNumber);
       if (!floor) {
+        // สร้างชื่อชั้นตาม floorNumber
+        const floorName = floorNumber === 2 
+          ? `${floorNumber} nd Floor` 
+          : `${floorNumber} th Floor`;
+  
+        // เพิ่มชั้นใหม่ใน floors
         floor = {
           floorNumber,
-          name: `${floorNumber}th Floor`,
+          name: floorName,
           rooms: [],
         };
         floors.push(floor);
@@ -63,10 +82,10 @@ export default function FloorPlan() {
   };
 
 
-  const handleRoomClick = (roomId, roomStatus, floorNumber) => {
+  const handleRoomClick = (roomName, roomStatus, floorNumber, roomId) => {
     if (roomStatus === "available") {
       router.push(
-        `/selectroom/${floorNumber}/${roomId}`
+        `/selectroom/${floorNumber}/${roomName}?roomId=${roomId}`
       );
     } else if (roomStatus === "booked") {
       alert("This room is already booked!");
@@ -98,7 +117,7 @@ export default function FloorPlan() {
                       key={room.id}
                       className={`${styles.room} ${roomClass}`}
                       onClick={() =>
-                        handleRoomClick(room.id, room.status, floor.floorNumber)
+                        handleRoomClick(room.id, room.status, floor.floorNumber,room.roomId)
                       }
                     >
                       {room.id}
@@ -124,7 +143,7 @@ export default function FloorPlan() {
                       key={room.id}
                       className={`${styles.room} ${roomClass}`}
                       onClick={() =>
-                        handleRoomClick(room.id, room.status, floor.floorNumber)
+                        handleRoomClick(room.id, room.status, floor.floorNumber, room.roomId)
                       }
                     >
                       {room.id}

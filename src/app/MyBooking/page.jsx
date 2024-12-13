@@ -28,6 +28,7 @@ export default function MyBooking() {
             // การจัดกลุ่มห้องในแต่ละชั้น
             const reBooking = []
             bookingsData.forEach((booking) =>{
+              console.log(booking?.customer?.user?.fname+" "+booking?.customer?.user?.lname)
               const data = {
                 id: Number(booking.bookingId),
                 title: `KimStar5 Floor ${booking.room.roomName[0]} Room ${booking.room.roomName}`,
@@ -36,6 +37,9 @@ export default function MyBooking() {
                 checkIn: formatDate(booking.startDate), // แปลง startDate
                 checkOut: formatDate(booking.endDate), // แปลง endDate
                 guests: `${booking.numGuest}`,
+                name : booking?.customer?.user?.fname+" "+booking?.customer?.user?.lname,
+                email : booking?.customer?.user?.email,
+                phone : booking?.customer?.user?.phone
               };
               reBooking.push(data)
             })
@@ -62,6 +66,14 @@ export default function MyBooking() {
                 {booking.status}
               </div>
               <div className={styles.bookingPrice}>{booking.price}</div>
+              {/* เงื่อนไขสำหรับ STAFF */}
+            {session?.user?.pl?.role == "STAFF" && (
+              <>
+                <p>Name: {booking.name}</p>
+                <p>Email: {booking.email}</p>
+                <p>Phone: {booking.phone}</p>
+              </>
+            )}
               <p>Check in: {booking.checkIn}</p>
               <p>Check out: {booking.checkOut}</p>
               <p>No. of guests: {booking.guests}</p>
