@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from '../../Navbar/Then/page';
 import styles from './page.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -93,9 +92,7 @@ export default function Signin() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <Navbar/>
-      </header>
+      
       <h1 className={styles.title}>KimStar5</h1>
       <div className={styles.formContainer}>
         <form className={styles.form} onSubmit={handleFormSubmit}>
@@ -129,8 +126,8 @@ export default function Signin() {
           </button>
           
           <div className={styles.linkContainer}>
-            <a href="/Auth/Register" className={styles.link}>Register?</a>
-            <a href="/Auth/ForgotPassword" className={styles.link}>Forgot Password?</a>
+            <a href="/auth/register" className={styles.link}>Register?</a>
+            <a href="/auth/forgotpassword" className={styles.link}>Forgot Password?</a>
           </div>
         </form>
       </div>

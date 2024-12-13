@@ -2,14 +2,10 @@ import axios from 'axios';
 
 const endpoint = "http://localhost:5000/api/";
 
-export default async function userLogin(userEmail, userPassword){
+export default async function userRegister(data){
     try {
-        const data = {
-            email: userEmail,
-            password: userPassword
-        };
         console.log('test')
-        const response = await axios.post(endpoint + 'login', data);
+        const response = await axios.post(endpoint + 'register', data);
         
         // ตรวจสอบว่า login สำเร็จหรือไม่
         if (!response.data.success) {

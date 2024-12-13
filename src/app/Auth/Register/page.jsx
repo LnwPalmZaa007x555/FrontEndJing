@@ -1,11 +1,12 @@
 "use client";
 
-import Navbar from '../../Navbar/Then/page';
-import styles from './page.module.css';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import styles from "./page.module.css";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { register } from '../../../lib/api'
+import { register } from "../../../lib/api";
+import userRegister from "@/lib/useregister";
+import { signIn } from "next-auth/react";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -16,16 +17,16 @@ export default function Register() {
     phone: "",
   });
 
-  const [firstNameError, setFirstNameError] = useState('');
-  const [lastNameError, setLastNameError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const router = useRouter();
 
   const capitalizeFirstLetter = (string) => {
-    if (!string) return '';
+    if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
@@ -35,62 +36,64 @@ export default function Register() {
     let formattedValue = value; // กำหนดค่าเริ่มต้นให้เป็นค่าจาก input
 
     switch (name) {
-      case 'fname':
+      case "fname":
         if (/^[a-zA-Z]*$/.test(value)) {
           formattedValue = capitalizeFirstLetter(value); // ทำตัวอักษรแรกเป็นพิมพ์ใหญ่
           setFormData((prevData) => ({
             ...prevData,
             fname: formattedValue,
           }));
-          setFirstNameError('');
+          setFirstNameError("");
         } else {
-          setFirstNameError('First name must only contain letters.');
+          setFirstNameError("First name must only contain letters.");
         }
         break;
 
-      case 'lname': 
+      case "lname":
         if (/^[a-zA-Z]*$/.test(value)) {
           formattedValue = capitalizeFirstLetter(value); // ทำตัวอักษรแรกเป็นพิมพ์ใหญ่
           setFormData((prevData) => ({
             ...prevData,
             lname: formattedValue,
           }));
-          setLastNameError('');
+          setLastNameError("");
         } else {
-          setLastNameError('Last name must only contain letters.');
+          setLastNameError("Last name must only contain letters.");
         }
         break;
 
-      case 'phone':
+      case "phone":
         if (/^\d{0,10}$/.test(value)) {
           setFormData((prevData) => ({
             ...prevData,
             phone: value,
           }));
-          setPhoneError('');
+          setPhoneError("");
         } else {
-          setPhoneError('Phone number must contain only digits and up to 10 characters.');
+          setPhoneError(
+            "Phone number must contain only digits and up to 10 characters."
+          );
         }
         break;
 
-      case 'email':
-        const filteredEmail = value.replace(/[^a-zA-Z0-9@._-]/g, '');
+      case "email":
+        const filteredEmail = value.replace(/[^a-zA-Z0-9@._-]/g, "");
         setFormData((prevData) => ({
           ...prevData,
           email: filteredEmail,
         }));
-        setEmailError('');
+        setEmailError("");
         break;
 
-      case 'password':
+      case "password":
         if (/^[a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|`~\-]*$/.test(value)) {
           setFormData((prevData) => ({
             ...prevData,
             password: value,
           }));
-          setPasswordError('');
+          setPasswordError("");
         } else {
-          setPasswordError('Password contains invalid characters.');
+          setPasswordError("Password contains invalid characters.");
         }
         break;
 
@@ -99,12 +102,14 @@ export default function Register() {
     }
   };
 
-  const validateEmail = () => {
+  const validateEmail = (isValid) => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
-      setEmailError('Please enter a valid email address.');
+      setEmailError("Please enter a valid email address.");
+      return false;
     } else {
-      setEmailError('');
+      setEmailError("");
+      return isValid;
     }
   };
 
@@ -113,42 +118,62 @@ export default function Register() {
     let isValid = true;
 
     // การตรวจสอบข้อมูลเบื้องต้น
-    if (formData.fname.trim() === '') {
-      setFirstNameError('Please enter your first name');
+    if (formData.fname.trim() === "") {
+      setFirstNameError("Please enter your first name");
       isValid = false;
     }
 
-    if (formData.lname.trim() === '') {
-      setLastNameError('Please enter your last name');
+    if (formData.lname.trim() === "") {
+      setLastNameError("Please enter your last name");
       isValid = false;
     }
 
     if (formData.phone.length !== 10) {
-      setPhoneError('Please enter a 10-digit phone number');
+      setPhoneError("Please enter a 10-digit phone number");
       isValid = false;
     }
 
-    if (formData.email.trim() === '') {
-      setEmailError('Please enter your email');
+    if (formData.email.trim() === "") {
+      setEmailError("Please enter your email");
       isValid = false;
     } else {
-      validateEmail();
+      isValid = validateEmail(isValid);
     }
 
     if (formData.password.length < 8) {
-      setPasswordError('Please enter a password with at least 8 characters');
+      setPasswordError("Please enter a password with at least 8 characters");
       isValid = false;
     }
 
-    if (isValid) {
-      alert('Registration successful');
-      router.push('/Home/AfterLogin');
+    if (!isValid) {
+      return;
     }
 
     const { fname, lname, email, password, phone } = formData;
     try {
-      const resp = await register({ fname, lname, email, password, phone });
-      console.log(resp);
+      const response = await userRegister({
+        fname,
+        lname,
+        email,
+        password,
+        phone,
+      });
+      console.log(response);
+      if (!response) {
+        return;
+      }
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (result.error) {
+        console.error(result.error);
+        alert("Login failed: " + result.error);
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -156,9 +181,6 @@ export default function Register() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <Navbar />
-      </header>
       <h1 className={styles.title}>KimStar5</h1>
       <div className={styles.formContainer}>
         <form className={styles.form} onSubmit={handleFormSubmit}>
@@ -171,7 +193,9 @@ export default function Register() {
             placeholder="Enter here"
             onChange={handleInputChange}
           />
-          {firstNameError && <p className={styles.errorText}>{firstNameError}</p>}
+          {firstNameError && (
+            <p className={styles.errorText}>{firstNameError}</p>
+          )}
 
           <label className={styles.label}>Last Name</label>
           <input
@@ -225,7 +249,7 @@ export default function Register() {
         </form>
 
         <div className={styles.linkContainer}>
-          <a href="/Auth/Login" className={styles.link}>
+          <a href="/auth/login" className={styles.link}>
             Sign in?
           </a>
         </div>

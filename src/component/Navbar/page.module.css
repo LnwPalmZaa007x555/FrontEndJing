@@ -1,0 +1,167 @@
+.navbar {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff; /* เปลี่ยนเป็นสีขาว */
+  padding: 15px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.link {
+  text-decoration: none;
+  color: #333333;
+  font-size: 1rem;
+  font-weight: bold;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #0073e6;
+  left: 50%;
+  bottom: -5px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.link:hover {
+  color: #000000;
+}
+
+.link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.navButtons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.signin, .register {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signout {
+  background-color: #555555; /* สีเทาเข้ม */
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signout:hover {
+  background-color: #333333;
+}
+
+.signin {
+  background-color: transparent;
+  color: #333333;
+  border: 1px solid #333333;
+}
+
+.signin:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.register {
+  background-color: #555555; /* สีเทาเข้ม */
+  color: #ffffff;
+  border: none;
+}
+
+.register:hover {
+  background-color: #333333;
+}
+
+
+/* Profile Icon */
+.profileIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease; /* อนิเมชั่นสำหรับการแสดงเมนู */
+}
+
+/* Dropdown Menu */
+.profileDropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 15px 20px;
+  width: 220px;
+  display: none; /* ซ่อนเมนูตอนแรก */
+  opacity: 0;
+  transform: translateY(-10px); /* เริ่มต้นเลื่อนขึ้นเล็กน้อย */
+  border: 1px solid #ddd; /* กรอบรอบเมนู */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* อนิเมชั่นเมื่อแสดง */
+}
+
+.profileDropdown.visible {
+  display: block; /* แสดงเมนู */
+  opacity: 1;
+  transform: translateY(0); /* เลื่อนกลับลงมา */
+}
+
+/* Profile Dropdown Items */
+.profileItem {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.profileItem:last-child {
+  margin-bottom: 0;
+}
+
+.profileItem a {
+  color: #0073e6;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.profileItem a:hover {
+  color: #005bb5;
+}
+
+/* เพิ่มกรอบหรือสีให้โปรไฟล์ */
+.profileIcon img {
+  border: 2px solid #0073e6; /* กรอบสีฟ้า */
+  border-radius: 50%;
+}

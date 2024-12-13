@@ -1,9 +1,11 @@
-import HomeBeforeLogin from './Home/BeforeLogin/page';
+import HomePage from "@/component/home/home";
+
+
 
 export default function Page() {
     return (
         <div>
-            <HomeBeforeLogin />
+            <HomePage/>
         </div>
     );
 }

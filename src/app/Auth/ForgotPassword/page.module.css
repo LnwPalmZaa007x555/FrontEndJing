@@ -88,4 +88,10 @@
     color: #4caf50;
     font-size: 1rem;
   }
+
+  .errorMessage {
+    margin-top: 15px;
+    color: #ff4d4f;
+    font-size: 1rem;
+  }
   

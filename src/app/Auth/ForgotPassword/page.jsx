@@ -1,13 +1,16 @@
 "use client";
 
-import Navbar from '../../Navbar/Then/page';
+import userResetlink from '@/lib/sendresetlinl';
 import styles from './page.module.css';
 import { useState } from 'react';
+import axios from 'axios';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  
 
   const handleResetSubmit = async (e) => {
     e.preventDefault();
@@ -19,13 +22,9 @@ export default function ForgotPassword() {
     }
 
     try {
-      const response = await fetch('/api/reset-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
+      const response = await userResetlink({ email })
+      console.log(response)
+      if (response?.success) {
         setSuccessMessage('A password reset link has been sent to your email.');
         setEmailError('');
         setEmail('');
@@ -34,16 +33,14 @@ export default function ForgotPassword() {
         setSuccessMessage('');
       }
     } catch (error) {
-      setEmailError('An error occurred. Please try again.');
+      setErrorMessage('An error occurred. Please try again.');
       setSuccessMessage('');
+      console.log(error)
     }
   };
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <Navbar />
-      </header>
       <h1 className={styles.title}>Forgot Password</h1>
       <div className={styles.formContainer}>
         <form className={styles.form} onSubmit={handleResetSubmit}>
@@ -62,6 +59,7 @@ export default function ForgotPassword() {
           </button>
         </form>
         {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
+        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
       </div>
     </div>
   );
