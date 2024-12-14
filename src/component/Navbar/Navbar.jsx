@@ -72,7 +72,7 @@ export default function Navbar() {
       </div>
         )}
         {session?.user?.pl?.role == 'STAFF' && (
-          <Link href="/auth/login">
+          <Link href="/Staff">
           <button className={styles.signin}>Staff</button>
         </Link>
         )}

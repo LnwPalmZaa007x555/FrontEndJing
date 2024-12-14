@@ -1,11 +1,13 @@
 "use client";
 
-import getMyBooking from "@/lib/mybooking";
+import { getMyBooking, userUpdateBooking , userUpdateRooms } from "@/lib/mybooking";
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function MyBooking() {
+  const router =  useRouter()
   const [ bookings, setBookings] = useState([])
   const { data: session, status } = useSession();
 
@@ -39,7 +41,8 @@ export default function MyBooking() {
                 guests: `${booking.numGuest}`,
                 name : booking?.customer?.user?.fname+" "+booking?.customer?.user?.lname,
                 email : booking?.customer?.user?.email,
-                phone : booking?.customer?.user?.phone
+                phone : booking?.customer?.user?.phone,
+                roomId : booking?.roomId
               };
               reBooking.push(data)
             })
@@ -53,6 +56,33 @@ export default function MyBooking() {
   
       fetchBooking();
     }, []);
+
+    const handleCancel = async (bookingId,roomId) => {
+      try {
+        const response = await userUpdateBooking(session?.user?.token, bookingId, 2); // เปลี่ยนสถานะเป็น 2 (canceled)
+        if (response.success) {
+          const updateRoomResponse = await userUpdateRooms(session?.user?.token,roomId, 0);
+
+
+          if (!updateRoomResponse.success) {
+            throw new Error("Failed to update room status");
+          }
+
+          setBookings((prevBookings) =>
+            prevBookings.map((booking) =>
+              booking.id === bookingId ? { ...booking, status: "cancled" } : booking
+            )
+          );
+          alert("Booking canceled successfully!");
+          router.push("/mybooking")
+        } else {
+          alert("Failed to cancel booking.");
+        }
+      } catch (error) {
+        console.error("Error canceling booking:", error);
+        alert("An error occurred. Please try again na ja.");
+      }
+    };
 
   return (
     <div className={styles.container}>
@@ -77,6 +107,17 @@ export default function MyBooking() {
               <p>Check in: {booking.checkIn}</p>
               <p>Check out: {booking.checkOut}</p>
               <p>No. of guests: {booking.guests}</p>
+
+              {/* ปุ่ม Cancel */}
+              {booking.status === "available" && (
+                <button
+                  className={styles.cancelButton}
+                  onClick={()=>handleCancel(booking.id,booking.roomId)}
+                >
+                  Cancel Booking
+                </button>
+              )}
+
             </div>
           </div>
         ))}

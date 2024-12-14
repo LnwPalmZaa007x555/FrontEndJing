@@ -1,0 +1,99 @@
+/* Container */
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.table td {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* ปุ่ม */
+.button {
+  width: 50px; /* ความกว้าง */
+  height: 35px; /* ความสูง */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem; /* ขนาดฟอนต์ */
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 5px; /* มุมโค้งเล็กน้อย */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin: 0 5px; /* ระยะห่างระหว่างปุ่ม */
+}
+
+.button:hover {
+  transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อ hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* เงาเมื่อ hover */
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ปุ่มสีเขียว */
+.button-green {
+  background-color: #28a745;
+}
+
+.button-green:hover {
+  background-color: #218838;
+}
+
+/* ปุ่มสีแดง */
+.button-red {
+  background-color: #dc3545;
+}
+
+.button-red:hover {
+  background-color: #c82333;
+}
+

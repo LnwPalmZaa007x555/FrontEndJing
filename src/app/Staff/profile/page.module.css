@@ -1,0 +1,40 @@
+/* Container */
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Info Group */
+.infoGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.value {
+  font-size: 1rem;
+  color: #333;
+  margin-top: 5px;
+}

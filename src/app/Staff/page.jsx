@@ -1,80 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./page.module.css";
+import { useSession } from "next-auth/react";
 
-export default function Home() {
-  // Mock Data สำหรับห้องพักและการจอง
-  const mockRooms = [
-    { id: 1, name: "Room 101", floor: 1, status: "Available", price: 3500 },
-    { id: 2, name: "Room 102", floor: 1, status: "Occupied", price: 3500 },
-  ];
+export default function Dashboard() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  if(session?.user?.pl?.role != 'STAFF'){
+    router.push("/")
+    return
+  }
 
-  const mockBookings = [
-    { id: 1, roomId: 1, customerName: "จู๋โด่", checkIn: "2024-11-25", checkOut: "2024-11-27" },
-    { id: 2, roomId: 2, customerName: "ควยตั้ง", checkIn: "2024-11-28", checkOut: "2024-11-30" },
-  ];
+  const handleNavigation = (path) => {
+    router.push(path);
+  };
 
-  // สถานะสำหรับแสดงข้อมูล
-  const [rooms] = useState(mockRooms);
-  const [bookings] = useState(mockBookings);
+  const handleLogout = () => {
+    // Mock logout function
+    alert("You have been logged out.");
+    router.push("/"); // Redirect to login page
+  };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>Hotel Management Dashboard</h1>
-
-      {/* ส่วนแสดงรายการห้องพัก */}
-      <section style={{ marginBottom: "40px" }}>
-        <h2>Rooms</h2>
-        <table border="1" cellPadding="10" style={{ width: "100%", textAlign: "left" }}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Floor</th>
-              <th>Status</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rooms.map((room) => (
-              <tr key={room.id}>
-                <td>{room.id}</td>
-                <td>{room.name}</td>
-                <td>{room.floor}</td>
-                <td>{room.status}</td>
-                <td>{room.price} BAHT</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      {/* ส่วนแสดงรายการการจอง */}
-      <section>
-        <h2>Bookings</h2>
-        <table border="1" cellPadding="10" style={{ width: "100%", textAlign: "left" }}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Room ID</th>
-              <th>Customer Name</th>
-              <th>Check-In</th>
-              <th>Check-Out</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.id}</td>
-                <td>{booking.roomId}</td>
-                <td>{booking.customerName}</td>
-                <td>{booking.checkIn}</td>
-                <td>{booking.checkOut}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Staff Dashboard</h1>
+      </div>
+      <div className={styles.grid}>
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/profile")}
+        >
+          <h2>View My Profile</h2>
+          <p>Check and update your personal information</p>
+        </div>
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/users")}
+        >
+          <h2>View All Users</h2>
+          <p>Access and manage all user information</p>
+        </div>
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/rooms")}
+        >
+          <h2>View Rooms</h2>
+          <p>Check information for all rooms</p>
+        </div>
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/payments")}
+        >
+          <h2>View Payments</h2>
+          <p>Access all payment records</p>
+        </div>
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/bookings")}
+        >
+          <h2>View Bookings</h2>
+          <p>Check all booking information</p>
+        </div>
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/createBooking")}
+        >
+          <h2>Create Booking</h2>
+          <p>Make a booking on behalf of a user</p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const endpoint = "http://localhost:5000/api/";
 
-export default async function getMyBooking(token) {
+export async function getMyBooking(token) {
     try {
         // เก็บ token ลงใน Cookies (client-side)
         Cookies.set('token', token, { expires: 1 });
@@ -15,6 +15,51 @@ export default async function getMyBooking(token) {
 
         // ตรวจสอบ response
         if (!response.data.success) {
+            throw new Error('Error during booking retrieval');
+        }
+
+        return response.data; // ส่งข้อมูลที่ได้จาก response กลับ
+    } catch (err) {
+        console.error(err); // พิมพ์ข้อผิดพลาดในคอนโซล
+        throw err; // โยนข้อผิดพลาดไปยัง caller เพื่อให้สามารถจัดการได้
+    }
+}
+
+export async function userUpdateBooking(token,bookingId,bookingStatus) {
+    try {
+        // เก็บ token ลงใน Cookies (client-side)
+        Cookies.set('token', token, { expires: 1 });
+
+        // ส่งคำขอ GET พร้อม cookie ที่มี token
+        const response = await axios.patch(endpoint + 'booking/'+bookingId,{bookingStatus}, {
+            withCredentials: true, // อนุญาตให้ส่ง cookie ไปยัง backend
+        });
+
+        // ตรวจสอบ response
+        if (!response.data.success) {
+            throw new Error('Error during booking retrieval');
+        }
+
+        return response.data; // ส่งข้อมูลที่ได้จาก response กลับ
+    } catch (err) {
+        console.error(err); // พิมพ์ข้อผิดพลาดในคอนโซล
+        throw err; // โยนข้อผิดพลาดไปยัง caller เพื่อให้สามารถจัดการได้
+    }
+}
+
+export async function userUpdateRooms(token,roomId,roomStatus) {
+    try {
+        // เก็บ token ลงใน Cookies (client-side)
+        Cookies.set('token', token, { expires: 1 });
+
+        // ส่งคำขอ GET พร้อม cookie ที่มี token
+        const response = await axios.patch(endpoint + 'room/'+roomId,{roomStatus:0}, {
+            withCredentials: true, // อนุญาตให้ส่ง cookie ไปยัง backend
+        });
+
+        // ตรวจสอบ response
+        if (!response.data.success) {
+            console.log(response.data)
             throw new Error('Error during booking retrieval');
         }
 
