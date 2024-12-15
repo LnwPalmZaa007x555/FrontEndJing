@@ -12,8 +12,9 @@ export default function Bookings() {
   const router = useRouter();
 
   const [ booking,setBooking ] = useState([])
-    const { data: session, status } = useSession();
-    if(session?.user?.pl?.role != 'STAFF'){
+  const { data: session, status } = useSession();
+   
+  if(session?.user?.pl?.role != 'STAFF'){
       router.push("/")
       return
     }
@@ -39,7 +40,7 @@ export default function Bookings() {
                 const reBooking = []
                 bookingData.forEach((booking) =>{
                   console.log(booking?.fname+" "+booking?.lname)
-                  const data = {
+                  if(booking?.bookingStatus==0){const data = {
                     id: Number(booking.bookingId),
                     customer : booking?.customer?.user?.fname+" "+booking?.customer?.user?.lname,
                     roomNumber : booking?.room?.roomName,
@@ -47,7 +48,7 @@ export default function Bookings() {
                     checkOut: formatDate(booking?.endDate)
                   };
                   reBooking.push(data)
-                  console.log(data)
+                  console.log(data)}
                 })
                 console.log(reBooking)
                 setBooking(reBooking)
