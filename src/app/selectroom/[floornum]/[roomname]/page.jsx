@@ -75,7 +75,8 @@ export default function PaymentPage({ params }) {
   Guests: ${guests}`);
       router.push("/");
     } catch (err) {
-      console.log(err)
+      console.error("Error creating booking:", err);
+      alert("Failed to create booking. Please try again.");
     }
   };
 

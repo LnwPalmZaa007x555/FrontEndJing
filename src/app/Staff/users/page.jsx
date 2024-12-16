@@ -12,7 +12,7 @@ export default function Users() {
   const router = useRouter();
   const [users,setUser] = useState([])
   const { data: session, status } = useSession();
-  if(session?.user?.pl?.role != 'STAFF'){
+  if(session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN'){
     router.push("/")
     return
   }
@@ -34,7 +34,7 @@ export default function Users() {
                   name : user?.fname+" "+user?.lname,
                   email : user?.email,
                   phone : user?.phone,
-                  role: user?.role
+                  role: user?.role,
                 };
                 reUser.push(data)
                 console.log(data)

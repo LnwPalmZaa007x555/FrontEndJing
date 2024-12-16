@@ -1,113 +1,174 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import creatUserBooking from "@/lib/createuserbooking";
 
-export default function CreateBooking() {
-  const [formData, setFormData] = useState({
-    customerName: "",
-    roomNumber: "",
-    checkIn: "",
-    checkOut: "",
-  });
+export default function CreateBookingPage() {
+  const [customerId, setCustomerId] = useState("");
+  const [roomName, setRoomName] = useState("");
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
+  const [guests, setGuests] = useState(1);
+  const [maxGuests, setMaxGuests] = useState(3);
 
- const router = useRouter();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { data: session } = useSession();
 
-  const { data: session, status } = useSession();
-      if(session?.user?.pl?.role != 'STAFF'){
-        router.push("/")
-        return
-      }
+  // Redirect if not STAFF
+  useEffect(() => {
+    if (session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN') {
+      router.push("/");
+    }
+  }, [session, router]);
 
-  const [successMessage, setSuccessMessage] = useState("");
+  // Update roomName and maxGuests based on searchParams
+  useEffect(() => {
+    const roomParam = searchParams.get("roomName");
+    if (roomParam) {
+      setRoomName(roomParam);
+      const floorNumber = Math.floor(Number(roomParam) / 100);
+      setMaxGuests(floorNumber > 4 ? 3 : 2); // Set max guests based on floor
+    }
+  }, [searchParams]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // Automatically calculate check-out date
+  useEffect(() => {
+    if (checkInDate) {
+      const checkIn = new Date(checkInDate);
+      checkIn.setFullYear(checkIn.getFullYear() + 1); // Add 1 year
+      setCheckOutDate(checkIn.toISOString().split("T")[0]);
+    }
+  }, [checkInDate]);
 
-  const handleSubmit = (e) => {
+  // Handle booking confirmation
+  const handleConfirm = async (e) => {
     e.preventDefault();
-
-    // Validation (Optional)
-    if (!formData.customerName || !formData.roomNumber || !formData.checkIn || !formData.checkOut) {
-      alert("Please fill in all required fields.");
+    if (!customerId || !roomName || !checkInDate || !checkOutDate || !guests) {
+      alert("Please fill in all fields.");
       return;
     }
 
-    // Mock API Call (Optional)
-    console.log("Booking Created:", formData);
+    const bookingData = {
+      customerId: Number(customerId),
+      roomName: roomName.trim(), // Trim whitespace
+      startDate: checkInDate,
+      endDate: checkOutDate,
+      numGuest: guests,
+    };
 
-    // Reset Form
-    setFormData({
-      customerName: "",
-      roomNumber: "",
-      checkIn: "",
-      checkOut: "",
-    });
+    console.log("roomName:", bookingData.roomName);
 
-    setSuccessMessage("Booking created successfully!");
+    try {
+      const response = await creatUserBooking(bookingData, session?.user?.token, bookingData.roomName);  // ส่ง token และ bookingData ไปยัง API
+      if (response.success) {
+        alert("Booking created successfully!");
+        router.push("/");
+      } else {
+        alert("Booking failed: " + response.message);
+      }
+    } catch (err) {
+      console.error("Error creating booking:", err);
+      alert("Failed to create booking. Please try again.");
+    }
   };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Create Booking</h1>
-      {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleConfirm}>
+        {/* Customer ID */}
         <div className={styles.formGroup}>
-          <label htmlFor="customerName" className={styles.label}>Customer Name</label> {/* แก้เป็น customerId ไอสัส */}
+          <label htmlFor="customerId" className={styles.label}>
+            UserID
+          </label>
           <input
             type="text"
-            id="customerName"
-            name="customerName"
+            id="customerId"
+            name="customerId"
             className={styles.input}
-            value={formData.customerName}
-            onChange={handleChange}
+            value={customerId}
+            onChange={(e) => setCustomerId(e.target.value)}
             required
           />
         </div>
+
+        {/* Room Name */}
         <div className={styles.formGroup}>
-          <label htmlFor="roomNumber" className={styles.label}>Room Number</label>
+          <label htmlFor="roomName" className={styles.label}>
+            Room Name
+          </label>
           <input
-            type="number"
-            id="roomNumber"
-            name="roomNumber"
+            type="text"
+            id="roomName"
+            name="roomName"
             className={styles.input}
-            value={formData.roomNumber}
-            onChange={handleChange}
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
             required
           />
         </div>
+
+        {/* Check-in Date */}
         <div className={styles.formGroup}>
-          <label htmlFor="checkIn" className={styles.label}>Check-in Date</label>
+          <label htmlFor="checkIn" className={styles.label}>
+            Check-in Date
+          </label>
           <input
             type="date"
             id="checkIn"
             name="checkIn"
             className={styles.input}
-            value={formData.checkIn}
-            onChange={handleChange}
+            value={checkInDate}
+            onChange={(e) => setCheckInDate(e.target.value)}
+            min={new Date().toISOString().split("T")[0]}
             required
           />
         </div>
+
+        {/* Check-out Date */}
         <div className={styles.formGroup}>
-          <label htmlFor="checkOut" className={styles.label}>Check-out Date</label>
+          <label htmlFor="checkOut" className={styles.label}>
+            Check-out Date
+          </label>
           <input
             type="date"
             id="checkOut"
             name="checkOut"
             className={styles.input}
-            value={formData.checkOut}
-            onChange={handleChange}
+            value={checkOutDate}
+            readOnly
             required
           />
         </div>
-        <button type="submit" className={styles.submitButton}>Create Booking</button>
+
+        {/* Number of Guests */}
+        <div className={styles.formGroup}>
+          <label htmlFor="guests" className={styles.label}>
+            Number of Guests
+          </label>
+          <select
+            id="guests"
+            name="guests"
+            className={styles.select}
+            value={guests}
+            onChange={(e) => setGuests(Number(e.target.value))}
+            required
+          >
+            {Array.from({ length: maxGuests }, (_, i) => i + 1).map((num) => (
+              <option key={num} value={num}>
+                {num} Guest{num > 1 ? "s" : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button type="submit" className={styles.submitButton}>
+          Create Booking
+        </button>
       </form>
     </div>
   );

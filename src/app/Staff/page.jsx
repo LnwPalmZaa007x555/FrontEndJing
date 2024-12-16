@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 export default function Dashboard() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  if(session?.user?.pl?.role != 'STAFF'){
+  if(session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN'){
     router.push("/")
     return
   }
@@ -70,6 +70,15 @@ export default function Dashboard() {
           <h2>Create Booking</h2>
           <p>Make a booking on behalf of a user</p>
         </div>
+        {session?.user?.pl?.role === 'ADMIN' && (
+        <div
+          className={styles.card}
+          onClick={() => handleNavigation("/Staff/admin")}
+          >
+          <h2>Change Roles</h2>
+          <p>Edit role user</p>
+        </div>
+        )}
       </div>
     </div>
   );

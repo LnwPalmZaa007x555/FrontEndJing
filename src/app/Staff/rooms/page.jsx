@@ -17,7 +17,7 @@ export default function Rooms() {
   const [selectedRoom, setSelectedRoom] = useState(null);
 
   const { data: session, status } = useSession();
-      if(session?.user?.pl?.role != 'STAFF'){
+      if(session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN'){
         router.push("/")
         return
       }

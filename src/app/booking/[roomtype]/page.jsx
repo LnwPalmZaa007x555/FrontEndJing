@@ -51,7 +51,6 @@ const page = ({ params }) => {
           <p className={styles.roomDescription}>
             <strong>Details:</strong> <br />
             • Floors: {selectedRoom.floor} <br />
-            • Rooms available: 15 <br />
             • Maximum occupancy: {selectedRoom.max} <br />
           </p>
           <Link href={`/selectroom?type=${roomIndex}`}>

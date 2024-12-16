@@ -12,7 +12,7 @@ export default function Profile() {
 
   const router = useRouter();
 
-    if(session?.user?.pl?.role != 'STAFF'){
+    if(session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN'){
       router.push("/")
       return
     }

@@ -76,8 +76,8 @@ export default function Signin() {
         })
   
         if (result.error) {
-          console.error(result.error);
           alert('Login failed: ' + result.error);
+          return
         } else {
           router.push('/');
         }        

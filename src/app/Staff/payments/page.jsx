@@ -5,14 +5,14 @@ import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { getMyBooking, userUpdateRooms } from "@/lib/mybooking";
-import { decreasePayment } from "@/lib/paymentinfo";
+import { decreasePayment, increasePayment } from "@/lib/paymentinfo";
 
 export default function Payments() {
   // Mock Data สำหรับ Payment
   const router = useRouter();  
   const [payments, setPayments] = useState([])
   const { data: session, status } = useSession();
-      if(session?.user?.pl?.role != 'STAFF'){
+      if(session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN'){
         router.push("/")
         return
       }
@@ -24,38 +24,6 @@ export default function Payments() {
           year: 'numeric',
         }).format(date);
       };
-      // const [payments, setPayments] = useState([
-  //   {
-  //     id: "P001",
-  //     customer: "อติชาติ",
-  //     roomNumber: 508,
-  //     roomType: "Normal",
-  //     checkIn: "2024-02-01",
-  //     checkOut: "2024-02-05",
-  //     monthlyAmount: 3500,
-  //     paidMonths: 1,
-  //   },
-  //   {
-  //     id: "P002",
-  //     customer: "อิสราพงศ์",
-  //     roomNumber: 501,
-  //     roomType: "Premium",
-  //     checkIn: "2024-02-01",
-  //     checkOut: "2024-02-05",
-  //     monthlyAmount: 4500,
-  //     paidMonths: 4,
-  //   },
-  //   {
-  //     id: "P003",
-  //     customer: "พัสกร",
-  //     roomNumber: 505,
-  //     roomType: "Premium",
-  //     checkIn: "2024-02-01",
-  //     checkOut: "2024-02-05",
-  //     monthlyAmount: 4500,
-  //     paidMonths: 0,
-  //   },
-  // ]);
 
   useEffect(() => {
             const fetchBooking = async () => {
@@ -64,7 +32,6 @@ export default function Payments() {
                 if (response.success) {
                   console.log("testJing")
                   const paymentData = response.data;
-                  console.log(paymentData)
                   // การจัดกลุ่มห้องในแต่ละชั้น
                   const rePayment = []
                   paymentData.forEach((booking) =>{
@@ -80,11 +47,12 @@ export default function Payments() {
                       paidMonths: booking?.payment?.installments,
                       amount: booking?.payment?.amount,
                       paymentId: Number(booking?.payment?.paymentId),
-                      roomId: Number(booking?.room?.roomId)
+                      roomId: Number(booking?.room?.roomId),
+                      customerId: Number(booking?.customer?.customerId)
                     };
-                    rePayment.push(data)
-                    console.log("test2")
-                    console.log(data)}
+                    console.log('data')
+                    console.log(data)
+                    rePayment.push(data)}
                   })
                   
                   console.log(rePayment)
@@ -105,14 +73,31 @@ export default function Payments() {
   
 
   // ฟังก์ชันเพิ่มจำนวนงวดที่ชำระ
-  const increasePaidMonths = (id) => {
-    setPayments((prevPayments) =>
-      prevPayments.map((payment) =>
-        payment.id === id && payment.paidMonths < 12
-          ? { ...payment, paidMonths: payment.paidMonths + 1 }
-          : payment
-      )
-    );
+  const increasePaidMonths = async (id, roomId) => {
+    try {
+      console.log("test token");
+      console.log(session?.user?.token);
+  
+      // เรียกใช้ API เพื่อเพิ่มจำนวนงวดที่ชำระ
+      const incPay = await increasePayment(session?.user?.token, id);
+      if (incPay.success) {
+        setPayments((prevPayments) =>
+          prevPayments.map((payment) =>
+            payment.paymentId === id && payment.paidMonths < 12
+              ? { ...payment, paidMonths: payment.paidMonths + 1 }
+              : payment
+          )
+        );
+  
+        // อัปเดตสถานะของห้อง (roomId)
+        const updateRoomResponse = await userUpdateRooms(session?.user?.token, roomId, 1);
+        if (!updateRoomResponse.success) {
+          throw new Error("Failed to update room status");
+        }
+      }
+    } catch (err) {
+      console.error("Error in increasePaidMonths:", err);
+    }
   };
 
   // ฟังก์ชันลดจำนวนงวดที่ชำระ
@@ -138,8 +123,6 @@ export default function Payments() {
       console.log(err)
     }
   };
-  console.log("test3")
-  console.log(payments)
 
   return (
     <div className={styles.container}>
@@ -149,6 +132,7 @@ export default function Payments() {
           <tr>
             <th>Booking ID</th>
             <th>Customer Name</th>
+            <th>Customer ID</th>
             <th>Room Number</th>
             <th>Room Type</th>
             <th>Check-in</th>
@@ -171,6 +155,7 @@ export default function Payments() {
               <tr key={payment.id}>
                 <td>{payment.id}</td>
                 <td>{payment.customer}</td>
+                <td>{payment.customerId}</td>
                 <td>{payment.roomNumber}</td>
                 <td>{payment.roomType}</td>
                 <td>{payment.checkIn}</td>
@@ -182,7 +167,7 @@ export default function Payments() {
                 <td>
                   <button
                     className={`${styles.button} ${styles["button-green"]}`}
-                    onClick={() => increasePaidMonths(payment.id)}
+                    onClick={() => increasePaidMonths(payment.paymentId,payment.roomId)}
                     disabled={payment.paidMonths === 12}
                   >
                     +

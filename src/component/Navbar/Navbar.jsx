@@ -34,7 +34,7 @@ export default function Navbar() {
             <Link href="/auth/login">
               <button className={styles.signin}>Sign in</button>
             </Link>
-            <Link href="/auth/Register">
+            <Link href="/auth/register">
               <button className={styles.register}>Register</button>
             </Link>
           </>
@@ -70,12 +70,12 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-        )}
-        {session?.user?.pl?.role == 'STAFF' && (
-          <Link href="/Staff">
-          <button className={styles.signin}>Staff</button>
-        </Link>
-        )}
+      )}
+      {(session?.user?.pl?.role === 'STAFF' || session?.user?.pl?.role === 'ADMIN') &&(
+        <Link href="/Staff">
+        <button className={styles.signin}>Manage</button>
+      </Link>
+      )}
       </div>
     </nav>
   );

@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { register } from "../../../lib/api";
+// import { register } from "../../../lib/api";
 import userRegister from "@/lib/useregister";
 import { signIn } from "next-auth/react";
 

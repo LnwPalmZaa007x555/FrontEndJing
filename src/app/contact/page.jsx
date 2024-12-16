@@ -19,7 +19,7 @@ export default function Page() {
           </div>
           <div className={styles.contactItem}>
             <h3 className={styles.contactTitle}>Email</h3>
-            <p>support@kimstar5.com</p>
+            <p>noscambykim@gmail.com</p>
           </div>
         </div>
       </main>

@@ -53,7 +53,7 @@ export async function userUpdateRooms(token,roomId,roomStatus) {
         Cookies.set('token', token, { expires: 1 });
 
         // ส่งคำขอ GET พร้อม cookie ที่มี token
-        const response = await axios.patch(endpoint + 'room/'+roomId,{roomStatus:0}, {
+        const response = await axios.patch(endpoint + 'room/'+roomId,{roomStatus:roomStatus}, {
             withCredentials: true, // อนุญาตให้ส่ง cookie ไปยัง backend
         });
 

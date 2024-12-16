@@ -14,7 +14,7 @@ export default function Bookings() {
   const [ booking,setBooking ] = useState([])
   const { data: session, status } = useSession();
    
-  if(session?.user?.pl?.role != 'STAFF'){
+  if(session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN'){
       router.push("/")
       return
     }
@@ -40,12 +40,14 @@ export default function Bookings() {
                 const reBooking = []
                 bookingData.forEach((booking) =>{
                   console.log(booking?.fname+" "+booking?.lname)
-                  if(booking?.bookingStatus==0){const data = {
+                  if(booking?.bookingStatus==0)
+                    {const data = {
                     id: Number(booking.bookingId),
                     customer : booking?.customer?.user?.fname+" "+booking?.customer?.user?.lname,
                     roomNumber : booking?.room?.roomName,
                     checkIn : formatDate(booking?.startDate),
-                    checkOut: formatDate(booking?.endDate)
+                    checkOut: formatDate(booking?.endDate),
+                    customerId: booking?.customer?.customerId,
                   };
                   reBooking.push(data)
                   console.log(data)}
@@ -69,6 +71,7 @@ export default function Bookings() {
           <tr>
             <th>Booking ID</th>
             <th>Customer Name</th>
+            <th>Customer ID</th>
             <th>Room Number</th>
             <th>Check-in Date</th>
             <th>Check-out Date</th>
@@ -79,6 +82,7 @@ export default function Bookings() {
             <tr key={booking.id+" "+index}>
               <td>{booking.id}</td>
               <td>{booking.customer}</td>
+              <td>{booking.customerId}</td>
               <td>{booking.roomNumber}</td>
               <td>{booking.checkIn}</td>
               <td>{booking.checkOut}</td>
