@@ -9,7 +9,7 @@ export default function Booking() {
         {/* Normal Room */}
         <div className={styles.roomCard}>
           <img
-            src="/Pictures/room.jpg"
+            src="/Pictures/normalroom.jpg"
             alt="Normal Room"
             className={styles.roomImage}
           />
@@ -29,7 +29,7 @@ export default function Booking() {
         {/* Premium Room */}
         <div className={styles.roomCard}>
           <img
-            src="/Pictures/room.jpg"
+            src="/Pictures/premiumroom1.jpg"
             alt="Premium Room"
             className={styles.roomImage}
           />

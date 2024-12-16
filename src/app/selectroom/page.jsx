@@ -65,8 +65,8 @@ export default function FloorPlan() {
       if (!floor) {
         // สร้างชื่อชั้นตาม floorNumber
         const floorName = floorNumber === 2 
-          ? `${floorNumber} nd Floor` 
-          : `${floorNumber} th Floor`;
+          ? `${floorNumber}nd Floor` 
+          : `${floorNumber}th Floor`;
   
         // เพิ่มชั้นใหม่ใน floors
         floor = {

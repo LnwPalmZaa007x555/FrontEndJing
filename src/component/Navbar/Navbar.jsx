@@ -46,6 +46,12 @@ export default function Navbar() {
            onClick={() => signOut({ callbackUrl: '/' })}>Sign Out</button>
         </Link>
 
+        {(session?.user?.pl?.role === 'STAFF' || session?.user?.pl?.role === 'ADMIN') &&(
+        <Link href="/Staff">
+        <button className={styles.signin}>Manage</button>
+      </Link>
+      )}
+
         {/* Profile Section */}
         <div className={styles.profileIcon} onClick={toggleDropdown}>
           <img
@@ -71,11 +77,7 @@ export default function Navbar() {
         </div>
       </div>
       )}
-      {(session?.user?.pl?.role === 'STAFF' || session?.user?.pl?.role === 'ADMIN') &&(
-        <Link href="/Staff">
-        <button className={styles.signin}>Manage</button>
-      </Link>
-      )}
+      
       </div>
     </nav>
   );

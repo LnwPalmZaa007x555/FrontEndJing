@@ -17,7 +17,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <Image
-          src="/Pictures/room.jpg"
+          src="/Pictures/hotel3.jpg"
           alt="Hotel Hero Image"
           fill
           className={styles.heroImage}
@@ -53,7 +53,7 @@ export default function HomePage() {
             >
               <SwiperSlide>
                 <Image
-                  src="/Pictures/room.jpg"
+                  src="/Pictures/hotel.jpg"
                   alt="Hotel View 1"
                   width={500}
                   height={300}
@@ -62,7 +62,7 @@ export default function HomePage() {
               </SwiperSlide>
               <SwiperSlide>
                 <Image
-                  src="/Pictures/room.jpg"
+                  src="/Pictures/hotel1.jpg"
                   alt="Hotel View 2"
                   width={500}
                   height={300}
@@ -71,7 +71,7 @@ export default function HomePage() {
               </SwiperSlide>
               <SwiperSlide>
                 <Image
-                  src="/Pictures/room.jpg"
+                  src="/Pictures/hotel2.jpg"
                   alt="Hotel View 3"
                   width={500}
                   height={300}
@@ -93,7 +93,7 @@ export default function HomePage() {
           >
             <div className={styles.roomCard}>
               <Image
-                src="/Pictures/room.jpg"
+                src="/Pictures/normalroom.jpg"
                 alt="Normal Room"
                 width={400}
                 height={300}
@@ -109,7 +109,7 @@ export default function HomePage() {
           >
             <div className={styles.roomCard}>
               <Image
-                src="/Pictures/room.jpg"
+                src="/Pictures/premiumroom1.jpg"
                 alt="Premium Room"
                 width={400}
                 height={300}

@@ -19,12 +19,14 @@ const page = ({ params }) => {
       floor: "2nd - 4th",
       max: "2 people",
       price: 3500,
+      image: "/Pictures/normalroom.jpg",
     },
     { 
       name: "Premium room",
       floor: "5th - 6th",
       max: "3 people",
       price: 4500,
+      img: "/Pictures/premiumroom1.jpg",
     },
   ];
 
@@ -40,7 +42,7 @@ const page = ({ params }) => {
       <h1 className={styles.title}>KimStar5</h1>
       <div className={styles.roomContainer}>
         <img
-          src="/Pictures/room.jpg"
+          src={selectedRoom.image || selectedRoom.img}
           alt={`${selectedRoom.name} image`}
           className={styles.roomImage}
         />
