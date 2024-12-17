@@ -3,7 +3,7 @@
   padding: 20px;
   padding-top: 80px;
   padding-bottom: 50px;
-  background-color: #f9f9f9; /* สีพื้นหลังที่สะอาด */
+  background-color: #f9f9f9; 
 }
 
 .header {
@@ -12,7 +12,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: #fff; /* พื้นหลังสีขาว */
+  background-color: #fff; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -20,13 +20,13 @@
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 30px;
-  color: #005bb5; /* ใช้สีฟ้าเข้มที่สอดคล้องกับหน้าหลัก */
+  color: #005bb5; 
 }
 
 .roomList {
   display: flex;
   flex-direction: column;
-  gap: 30px; /* เพิ่มช่องว่างระหว่างการ์ด */
+  gap: 30px; 
   align-items: center;
 }
 

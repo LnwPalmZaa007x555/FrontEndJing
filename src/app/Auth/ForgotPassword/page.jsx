@@ -16,8 +16,8 @@ export default function ForgotPassword() {
     e.preventDefault();
 
     if (email.trim() === '') {
-      setEmailError('Please enter your email'); // แสดงข้อความ error สีแดง
-      setSuccessMessage(''); // ล้างข้อความ success
+      setEmailError('Please enter your email'); 
+      setSuccessMessage(''); 
       return;
     }
 

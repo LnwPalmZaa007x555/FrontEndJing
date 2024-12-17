@@ -4,15 +4,9 @@ import { use, useEffect } from "react";
 import styles from "./page.module.css";
 
 const page = ({ params }) => {
-  const resolvedParams = use(params); // Unwrap params using use()
-  const roomIndex = Number(resolvedParams.roomtype)-1; // แปลงค่า roomtype เป็น number
+  const resolvedParams = use(params); 
+  const roomIndex = Number(resolvedParams.roomtype)-1; 
   
-  // useEffect(()=>{
-  //   console.log(info)
-  //   console.log(roomIndex)
-  //   console.log(info[roomIndex])
-  // },[roomIndex,params])
-
   const info = [
     { 
       name: "Normal room",
@@ -30,7 +24,6 @@ const page = ({ params }) => {
     },
   ];
 
-  // ตรวจสอบว่า index อยู่ในช่วงที่ถูกต้อง
   if (isNaN(roomIndex) || roomIndex < 0 || roomIndex >= info.length) {
     return <div>Error: Invalid room type.</div>;
   }

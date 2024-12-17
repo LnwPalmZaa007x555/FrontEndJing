@@ -25,7 +25,7 @@ export default function Signin() {
       [name]: value,
     }));
 
-    // Validate input immediately
+  
     if (name === 'email') {
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(value)) {
@@ -49,7 +49,7 @@ export default function Signin() {
 
     let isValid = true;
 
-    // ตรวจสอบว่ากรอก email หรือ password ครบถ้วนหรือไม่
+
     if (formData.email.trim() === '') {
       setEmailError('Please enter your email');
       isValid = false;
@@ -64,7 +64,7 @@ export default function Signin() {
       setPasswordError('');
     }
 
-    // หากข้อมูลครบถ้วนให้ทำการ sign in และนำทางไปหน้าแรก
+  
     if (isValid) {
       try {
         const email = formData.email

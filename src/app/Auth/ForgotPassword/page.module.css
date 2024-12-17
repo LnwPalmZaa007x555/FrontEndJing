@@ -4,8 +4,8 @@
     padding: 0;
     height: 100%;
     font-family: 'Poppins', sans-serif;
-    background-color: #f9f9f9; /* สีพื้นหลัง */
-    color: #333333; /* สีข้อความหลัก */
+    background-color: #f9f9f9; 
+    color: #333333; 
   }
 
   .container {

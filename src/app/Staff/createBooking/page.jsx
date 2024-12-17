@@ -18,33 +18,33 @@ export default function CreateBookingPage() {
   const searchParams = useSearchParams();
   const { data: session } = useSession();
 
-  // Redirect if not STAFF
+  
   useEffect(() => {
     if (session?.user?.pl?.role !== 'STAFF' && session?.user?.pl?.role !== 'ADMIN') {
       router.push("/");
     }
   }, [session, router]);
 
-  // Update roomName and maxGuests based on searchParams
+ 
   useEffect(() => {
     const roomParam = searchParams.get("roomName");
     if (roomParam) {
       setRoomName(roomParam);
       const floorNumber = Math.floor(Number(roomParam) / 100);
-      setMaxGuests(floorNumber > 4 ? 3 : 2); // Set max guests based on floor
+      setMaxGuests(floorNumber > 4 ? 3 : 2); 
     }
   }, [searchParams]);
 
-  // Automatically calculate check-out date
+ 
   useEffect(() => {
     if (checkInDate) {
       const checkIn = new Date(checkInDate);
-      checkIn.setFullYear(checkIn.getFullYear() + 1); // Add 1 year
+      checkIn.setFullYear(checkIn.getFullYear() + 1); 
       setCheckOutDate(checkIn.toISOString().split("T")[0]);
     }
   }, [checkInDate]);
 
-  // Handle booking confirmation
+ 
   const handleConfirm = async (e) => {
     e.preventDefault();
     if (!customerId || !roomName || !checkInDate || !checkOutDate || !guests) {

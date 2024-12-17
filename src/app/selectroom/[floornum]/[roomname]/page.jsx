@@ -69,7 +69,7 @@ export default function PaymentPage({ params }) {
         session?.user?.token
       );
   
-      alert(`Booking confirmed for Room ${roomId} on Floor ${floorNumber} (Premium Room).
+      alert(`Booking confirmed for Room ${roomId} on Floor ${floorNumber}.
   Check-in: ${checkInDate}
   Check-out: ${checkOutDate}
   Guests: ${guests}`);

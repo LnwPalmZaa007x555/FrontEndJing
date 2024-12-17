@@ -4,8 +4,8 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-top: 100px; /* Adjust for Navbar */
-  background-color: #f9f9f9; /* Neutral background color */
+  padding-top: 100px; 
+  background-color: #f9f9f9; 
   font-family: "Poppins", sans-serif;
 }
 

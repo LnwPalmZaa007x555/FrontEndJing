@@ -6,7 +6,7 @@ html, body {
   font-family: 'Poppins', sans-serif;
   background-color: #f9f9f9;
   color: #333333;
-  overflow-x: hidden; /* ป้องกันการเลื่อนในแนวนอน */
+  overflow-x: hidden; 
 }
 
 /* Container */
@@ -17,8 +17,8 @@ html, body {
   justify-content: center;
   min-height: 100vh;
   background-color: #f9f9f9;
-  padding: 70px; /* เพิ่ม padding รอบด้าน */
-  box-sizing: border-box; /* รวม padding เข้าไปในขนาดของ container */
+  padding: 70px; 
+  box-sizing: border-box; 
 }
 
 /* Title */

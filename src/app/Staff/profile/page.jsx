@@ -45,13 +45,13 @@ export default function Profile() {
           fetchBooking();
         }, []);
   // Mock Data สำหรับข้อมูล Staff
-  const staffData = {
-    name: 'จอน ยาเซ่น',
-    email: 'john.doe@kimstar5.com',
-    phone: '021456879',
-    role: 'ประธานตึงๆ',
-    joinedDate: '2023-01-15',
-  };
+  // const staffData = {
+  //   name: 'จอน ยาเซ่น',
+  //   email: 'john.doe@kimstar5.com',
+  //   phone: '021456879',
+  //   role: 'ประธานตึงๆ',
+  //   joinedDate: '2023-01-15',
+  // };
 
   return (
     <div className={styles.container}>

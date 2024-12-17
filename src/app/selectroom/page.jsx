@@ -59,7 +59,7 @@ export default function FloorPlan() {
   const groupRoomsByFloor = (rooms) => {
     const floors = [];
     rooms.forEach((room) => {
-      const floorNumber = Math.floor(Number(room.id) / 100); // การคำนวณชั้นจาก roomId (เช่น 201 -> 2nd floor)
+      const floorNumber = Math.floor(Number(room.id) / 100); 
       console.log(floorNumber)
       let floor = floors.find((f) => f.floorNumber === floorNumber);
       if (!floor) {

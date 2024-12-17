@@ -4,8 +4,8 @@ html, body {
   padding: 0;
   height: 100%;
   font-family: 'Poppins', sans-serif;
-  background-color: #f9f9f9; /* สีพื้นหลัง */
-  color: #333333; /* สีข้อความหลัก */
+  background-color: #f9f9f9;
+  color: #333333; 
 }
 
 /* Container */
@@ -24,15 +24,15 @@ html, body {
   font-size: 2.5rem;
   margin-bottom: 20px;
   font-weight: bold;
-  color: #032F30; /* สีเขียวเข้ม */
+  color: #032F30; 
 }
 
 /* Form Container */
 .formContainer {
-  background-color: #ffffff; /* พื้นหลังสีขาว */
+  background-color: #ffffff; 
   padding: 25px 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* เงาลึกขึ้น */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
 }

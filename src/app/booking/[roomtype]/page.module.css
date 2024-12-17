@@ -2,7 +2,7 @@
     text-align: center;
     padding: 20px;
     padding-top: 80px;
-    background-color: #f9f9f9; /* สีพื้นหลังที่เข้ากับหน้าหลัก */
+    background-color: #f9f9f9; 
   }
   
   .header {
@@ -11,15 +11,15 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    background-color: #fff; /* พื้นหลัง navbar */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    background-color: #fff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   }
   
   .title {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 30px;
-    color: #005bb5; /* สีฟ้าเข้มที่สอดคล้องกับธีม */
+    color: #005bb5; 
   }
   
   .roomContainer {
@@ -27,12 +27,12 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    background-color: #ffffff; /* พื้นหลังการ์ด */
+    background-color: #ffffff; 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* เงาของการ์ด */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); 
     max-width: 600px;
-    margin: 20px auto; /* เพิ่มระยะห่างด้านบน */
+    margin: 20px auto;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
